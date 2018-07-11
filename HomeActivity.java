@@ -27,7 +27,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     public String photoFileName;
     public final String APP_TAG = "MyCustomApp";
     File photoFile;
+    private final int SOME_WIDTH = 330;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,14 +103,14 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
                     e.printStackTrace();
                     Log.d("HomeActivity", e.getMessage());
-
                 }
             }
         });
+        Intent intent = new Intent(this, FeedActivity.class);
+        startActivity(intent);
     }
 
     private void loadTopPosts() {
-
         final Post.Query postsQuery = new Post.Query();
         postsQuery.getTop().withUser();
         postsQuery.findInBackground(new FindCallback<Post>() {
@@ -126,11 +129,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFileName);
-                imgTakenPic.setImageBitmap(takenImage);
+                Bitmap rawTakenImage = BitmapFactory.decodeFile(photoFileName);
+                imgTakenPic.setImageBitmap(rawTakenImage);
         }
     }
 
