@@ -56,7 +56,17 @@ public class HomeActivity extends AppCompatActivity {
         addPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // create the file where the photo should go
+
+                try {
+                    photoFile = createPhotoFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Uri photoURI = FileProvider.getUriForFile(HomeActivity.this, "com.example.arorasomya64.parstagram", photoFile);
+
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(intent, CAM_REQUEST);
                 }
@@ -69,9 +79,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String description = descriptionInput.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
-                final File file = new File(imagePath);
                 // take a photo from the camera and grab the data
-                final ParseFile parseFile = new ParseFile(file);
+                final ParseFile parseFile = new ParseFile(photoFile);
                 createPost(description, parseFile, user);
             }
         });
@@ -116,21 +125,14 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-////            Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-//            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-//            imgTakenPic.setImageBitmap(bitmap);
-//            try {
-//                photoFile = getPhotoFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFileName);
+                imgTakenPic.setImageBitmap(takenImage);
+        }
+    }
 
 
     // creates the file path and returns the file
@@ -154,27 +156,5 @@ public class HomeActivity extends AppCompatActivity {
         );
         photoFileName = image.getAbsolutePath();
         return image;
-    }
-
-    // launch the camera
-    public void dispatchTakePictureIntent() {
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // ensure that there is a camera activity to handle the capture request
-        if (takePicture.resolveActivity(getPackageManager()) != null) {
-            // create the fule where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createPhotoFile();
-            } catch (IOException ex) {
-                // error ocurred while creating the File
-                Log.d("NOFILE", "error occured while creating the file");
-            }
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "com.example.android.fileprovider",
-                        photoFile);
-                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePicture, CAM_REQUEST);
-            }
-        }
     }
 }

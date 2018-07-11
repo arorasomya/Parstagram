@@ -12,6 +12,14 @@ public class Post extends ParseObject {
     private static final String KEY_IMAGE = "image";
     private static final String KEY_USER = "user";
 
+    public ParseFile getMedia() {
+        return getParseFile("media");
+    }
+
+    public void setMedia(ParseFile parseFile) {
+        put("media", parseFile);
+    }
+
     public String getKeyDescription() {
         return getString(KEY_DESCRIPTION);
     }
