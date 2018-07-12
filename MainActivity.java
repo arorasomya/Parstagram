@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
                 final String username = usernameInput.getText().toString();
                 final String password = passwordInput.getText().toString();
                 login(username, password);
-
             }
         });
     }

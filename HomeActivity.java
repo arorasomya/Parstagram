@@ -84,15 +84,17 @@ public class HomeActivity extends AppCompatActivity {
                 final ParseUser user = ParseUser.getCurrentUser();
                 // take a photo from the camera and grab the data
                 final ParseFile parseFile = new ParseFile(photoFile);
-                createPost(description, parseFile, user);
+                final String handle = user.getString("handle");
+                createPost(description, parseFile, user, handle);
             }
         });
         loadTopPosts();
     }
 
-    private void createPost(String description, ParseFile parseFile, ParseUser user) {
+    private void createPost(String description, ParseFile parseFile, ParseUser user, String handle) {
         final Post newPost = new Post();
         newPost.setDescription(description);
+        newPost.setHandle(handle);
         newPost.setUser(user);
         newPost.setImage(parseFile);
         newPost.saveInBackground(new SaveCallback() {

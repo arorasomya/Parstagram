@@ -32,7 +32,7 @@ public class Post extends ParseObject {
     public void setHandle(String handle) { put(KEY_HANDLE, handle); }
 
     public String getHandle() {
-        return getString(KEY_HANDLE);
+        return getUser().getString(KEY_HANDLE);
     }
 
     public ParseFile getImage() {

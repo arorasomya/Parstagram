@@ -59,9 +59,7 @@ public class FeedActivity extends AppCompatActivity {
                 }
             });
             postAdapter.addAll(posts);
-
     }
-
 
     public void launchCreateHome(View view) {
         Intent intent = new Intent(this, HomeActivity.class);
